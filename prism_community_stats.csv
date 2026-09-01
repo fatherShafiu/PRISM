@@ -1,0 +1,20 @@
+# PRISM: Fraud-Resistant Referral Programme Design Framework
+# Python requirements
+#
+# Install: pip install -r requirements.txt
+
+# Core scientific stack
+numpy>=1.24
+pandas>=2.0
+networkx>=3.0
+
+# Machine learning (experiments)
+scikit-learn>=1.2
+xgboost>=2.0
+
+# Visualisation (experiments)
+matplotlib>=3.7
+seaborn>=0.12
+
+# Optional: model persistence
+joblib>=1.3
