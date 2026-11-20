@@ -1,0 +1,151 @@
+============================================================
+  PRISM Experiment Suite v3
+  GroupKFold CV | Temporal Holdout | AUC-corrected
+============================================================
+[1] Loaded grouped dataset: 10,000 records
+    Groups: 54  Fraud: 20.0%
+
+[2] Baseline comparison (GroupKFold, ring-aware)...
+    PRISM-LR...
+    Random Forest...
+    XGBoost...
+    Isolation Forest...
+    One-Class SVM...
+
+  Method                         P      R     F1    FPR     AUC
+  ---------------------------------------------------------
+  * PRISM (Rule-based)       0.705  0.817  0.757  0.085   0.846
+  * PRISM-LR (Learned)       0.746  0.845  0.792  0.072   0.955
+    Random Forest            0.902  0.905  0.903  0.025    0.99
+    XGBoost                  0.871  0.918  0.894  0.034    0.99
+    Isolation Forest         0.686  0.687  0.686  0.079   0.907
+    One-Class SVM            0.784  0.807  0.795  0.056   0.922
+
+[3] Temporal holdout evaluation...
+    Train: 3,807  Val: 2,693  Test: 3,500
+
+  Method                         P      R     F1     AUC
+  --------------------------------------------------
+  PRISM (Rule-based)         0.554   0.71  0.623    0.79
+  PRISM-LR                   0.778  0.739  0.758   0.937
+  XGBoost                     0.85  0.874  0.861   0.982
+
+[4] Ablation study (GroupKFold, ring-aware)...
+    Full PRISM                          F1=0.792  ΔF1=—
+    w/o Pillar 1 (Phone/Identity)       F1=0.755  ΔF1=-0.037
+    w/o Pillar 2 (Temporal Gate)        F1=0.788  ΔF1=-0.004  [Pillar 2 is also enforced as a hard gate before scoring]
+    w/o Pillar 3 (Threshold)            F1=0.792  ΔF1=+0.000
+    w/o Pillar 4 (Caps/Rewards)         F1=0.574  ΔF1=-0.218
+    w/o Pillar 5 (Graph/Ring)           F1=0.718  ΔF1=-0.074
+
+[5] Robustness sweep (5%–30% fraud rate)...
+    fraud_rate=5%...     Building referral graph...
+    Graph: 5,080 nodes, 9,999 edges
+    Computing PageRank...
+    Computing betweenness centrality (approximate, k=500)...
+    Computing clustering coefficients...
+    Running Louvain community detection on reciprocal subgraph...
+    Ring communities detected: 2
+Rule F1=0.483  LR F1=0.519  XGB F1=0.855
+    fraud_rate=10%...     Building referral graph...
+    Graph: 5,252 nodes, 9,999 edges
+    Computing PageRank...
+    Computing betweenness centrality (approximate, k=500)...
+    Computing clustering coefficients...
+    Running Louvain community detection on reciprocal subgraph...
+    Ring communities detected: 3
+Rule F1=0.630  LR F1=0.713  XGB F1=0.875
+    fraud_rate=20%...     Building referral graph...
+    Graph: 5,601 nodes, 9,997 edges
+    Computing PageRank...
+    Computing betweenness centrality (approximate, k=500)...
+    Computing clustering coefficients...
+    Running Louvain community detection on reciprocal subgraph...
+    Ring communities detected: 6
+Rule F1=0.757  LR F1=0.792  XGB F1=0.894
+    fraud_rate=30%...     Building referral graph...
+    Graph: 5,946 nodes, 9,999 edges
+    Computing PageRank...
+    Computing betweenness centrality (approximate, k=500)...
+    Computing clustering coefficients...
+    Running Louvain community detection on reciprocal subgraph...
+    Ring communities detected: 9
+Rule F1=0.807  LR F1=0.844  XGB F1=0.919
+
+[6] Per-vector recall...
+    E1_self_referral         Rule-based=1.000  PRISM-LR=1.000  RF=1.000  XGBoost=1.000
+    E2_fake_farming          Rule-based=1.000  PRISM-LR=0.437  RF=1.000  XGBoost=1.000
+    E3_micro_order           Rule-based=0.000  PRISM-LR=0.894  RF=1.000  XGBoost=1.000
+    E4_threshold_return      Rule-based=0.932  PRISM-LR=0.592  RF=0.260  XGBoost=0.364
+    E5_credit_stacking       Rule-based=1.000  PRISM-LR=1.000  RF=1.000  XGBoost=1.000
+    E6_discount_compound     Rule-based=1.000  PRISM-LR=1.000  RF=1.000  XGBoost=1.000
+    E7_referral_ring         Rule-based=1.000  PRISM-LR=0.983  RF=0.972  XGBoost=0.978
+    E8_code_exposure         Rule-based=1.000  PRISM-LR=1.000  RF=1.000  XGBoost=1.000
+  ✓ fig_per_vector_heatmap.png
+
+[7] Economic impact (rule-based PRISM)...
+    exposure   57,179.4
+    protected  49,839.4
+    leaked     7,340.0
+    n_fp       682.0
+    review     3,410.0
+    net        46,429.4
+    reduction  87.2
+    residual   10,750.0
+    ratio      13.6
+
+[8] Learned weights (standardised LR coefficients)...
+    monthly_referral_count     +3.134
+    same_ip_subnet             +1.726
+    both_discounts             +1.411
+    phone_verified             -0.869
+    returned_in_window         +0.845
+    referee_account_age        -0.840
+    clustering_coeff           +0.623
+    same_device                +0.549
+    stacked_credits            +0.531
+    credit_requested_ghs       +0.444
+    in_ring_cluster            +0.325
+    public_code_exposure       +0.199
+    betweenness_centrality     -0.143
+    pagerank                   +0.101
+    meets_threshold            +0.000
+
+[9] Weight sensitivity (base AUC=0.846, max |ΔF1|=0.000)
+    account_age     AUC -50%=0.846  +50%=0.864
+    same_device     AUC -50%=0.846  +50%=0.860
+    both_discounts  AUC -50%=0.846  +50%=0.846
+    monthly_cap     AUC -50%=0.842  +50%=0.846
+    ring_cluster    AUC -50%=0.847  +50%=0.851
+    credit_cap      AUC -50%=0.846  +50%=0.847
+    code_exposure   AUC -50%=0.842  +50%=0.846
+    compound        AUC -50%=0.846  +50%=0.860
+  ✓ fig6_sensitivity.png
+
+    Ring detector: E7 recall=1.000  legit events flagged=34
+
+[10] Generating figures...
+  ✓ fig5_graph_detection.png
+    Graph: full-graph communities=56 (meeting ring criterion: 0); reciprocal-subgraph communities=10
+  ✓ fig_baseline_comparison.png
+  ✓ fig_roc_curves.png
+  ✓ fig_ablation.png
+  ✓ fig_temporal_holdout.png
+  ✓ fig_robustness.png
+
+[11] Writing LaTeX tables...
+  ✓ prism_experiment_tables.tex
+
+============================================================
+  KEY RESULTS SUMMARY
+============================================================
+  PRISM Rule-based: F1=0.757  AUC=0.846
+  PRISM-LR:         F1=0.792  AUC=0.955
+  Random Forest:    F1=0.903  AUC=0.99
+  XGBoost:          F1=0.894  AUC=0.99
+  One-Class SVM:    F1=0.795  AUC=0.922
+
+  Ablation: largest drop from 'w/o Pillar 4 (Caps/Rewards)'  ΔF1=+0.218
+
+  Temporal holdout PRISM-LR: F1=0.758  AUC=0.937
+============================================================

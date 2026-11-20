@@ -1,0 +1,11 @@
+community_id,size,edges,reciprocal_density,flagged_as_ring
+0,6,30,1.0,True
+1,6,28,0.929,True
+2,6,30,1.0,True
+3,5,20,1.0,True
+4,2,2,1.0,False
+5,7,42,1.0,True
+6,6,30,1.0,True
+7,2,2,1.0,False
+8,2,2,1.0,False
+9,2,2,1.0,False
