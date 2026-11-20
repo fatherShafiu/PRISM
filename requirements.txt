@@ -1,25 +1,10 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-dist/
-build/
-.venv/
-venv/
-*.pkl
-
-# Data (large files — tracked via Git LFS or external storage)
-# Uncomment if you prefer not to commit the CSV:
-# data/*.csv
-
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
+# PRISM: pinned to the environment used for the reported results (Python 3.13.18)
+# Install: pip install -r requirements.txt
+numpy==2.5.3
+pandas==3.0.5
+scipy==1.18.1
+networkx==3.7
+scikit-learn==1.9.1
+xgboost==3.4.1
+matplotlib==3.11.2
+joblib==1.6.0
